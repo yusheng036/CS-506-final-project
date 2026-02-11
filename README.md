@@ -1,11 +1,10 @@
-# CS-506-final-project
-
 CS 506 Proposal
 
-Project Description
-The project our team intends to develop is a website that helps passengers identify the least crowded bus travel time periods across Boston by analyzing load patterns by route, stop, and time of day. Users will input their intended destination, and the system will provide estimated bus crowding levels based on historical data from the MBTA Rider Census and the MBTA data handling team. The website would provide tables and graphs throughout the day to show the most appropriate time to take the bus to avoid the crowd. 
+Project Description:
 
-The primary goal of this project is to provide additional support for mobility-impaired individuals and wheelchair users by helping them identify more accessible and comfortable travel times on public transportation. It will also benefit passengers who experience discomfort in tightly crowded spaces when using MBTA buses.
+	The project our team intends to develop is a website that helps passengers identify the least crowded bus travel time periods across Boston by analyzing load patterns by route, stop, and time of day. Users will input their intended destination, and the system will provide estimated bus crowding levels based on historical data from the MBTA Rider Census and the MBTA data handling team. The website would provide tables and graphs throughout the day to show the most appropriate time to take the bus to avoid the crowd. 
+
+	The primary goal of this project is to provide additional support for mobility-impaired individuals and wheelchair users by helping them identify more accessible and comfortable travel times on public transportation. It will also benefit passengers who experience discomfort in tightly crowded spaces when using MBTA buses.
 
 Project Timeline:
 * Weeks 1–2: Collect MBTA Rider Census data, analyze patterns within the datasets, and produce initial tables and graphs summarizing bus crowding trends.
@@ -14,7 +13,7 @@ Project Timeline:
 * Weeks 7–8: Conduct user testing within the team, address bugs and edge cases, and prepare the final project presentation.
 
 
-Project Goal
+Project Goal:
 
 The primary goal of this project is to analyze MBTA bus performance data to identify whether bus service quality is consistent across different geographic areas, routes, and time periods in Boston. In this project, equity is defined as fairness in service reliability rather than economic or demographic factors.
 
