@@ -25,7 +25,8 @@ Specifically, this project aims to:
 These goals will be evaluated using quantitative metrics such as prediction error (e.g., MAE or RMSE), differences in average delay across routes and time periods, and consistency of results across train-test splits.
 
 
-Data Collection
+Data Collection:
+
 1. MBTA Bus Ridership by Time Period, Season, Route/Line, and Stop
 Description: The dataset provides ridership activity such as average on and off at each stop during different seasons.
 Data Access Method: We will download this dataset from the MBTA Open Data Portal. https://mbta-massdot.opendata.arcgis.com/datasets/7acd353c1a734eb8a23caf46a0e66b23_0/explore
@@ -34,7 +35,7 @@ Description: The dataset contains arrival and departure events for MBTA buses an
 Data Access Method: We will download this dataset from the MBTA Open Data Portal. https://mbta-massdot.opendata.arcgis.com/datasets/924df13d845f4907bb6a6c3ed380d57a/about
 
 
-Data Modelling
+Data Modelling:
 	
 We will preprocess the MBTA ridership and arrival/departure data by cleaning missing values and aggregating passenger counts by route, stop, and time of day. Crowd levels will be measured using average passenger load over fixed time intervals. To identify the least crowded travel periods, we will use simple predictive models such as XGBoost to estimate passenger load based on features like time of day, day of week, season, and route. The model results will help highlight consistent low-crowding time periods across different bus routes.
 
@@ -43,6 +44,6 @@ Data Visualization
 	The current plan is : 1) Add multiple location-based heat graphs which display the crowdedness across different time periods. 2) Add table structure for the interface
 
 
-Test Plan
+Test Plan:
 
 To evaluate our system, we will use a chronological train/test split to measure real-world generalization. We will train our models on MBTA bus data from 2023–2024 and test performance on 2025 data to determine whether identified low-crowding periods and reliability patterns remain consistent in a future year. To tune model hyperparameters, we will reserve the final three months of 2024 as a validation set. For crowding prediction, we will evaluate performance using Mean Absolute Error (MAE) and Root Mean Squared Error (RMSE) if modeling passenger load as a continuous variable. We will also compare our model against baseline options, including a historical average model based on route and time-of-day, to ensure that our predictive model provides meaningful improvement.
