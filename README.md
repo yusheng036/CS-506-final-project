@@ -1,4 +1,4 @@
-CS 506 Proposal
+# CS 506 Proposal
 
 Project Description:
 
