@@ -2,16 +2,13 @@
 
 Project Description:
 
-The project our team intends to develop is a website that helps passengers identify the least crowded bus travel time periods across Boston by analyzing load patterns by route, stop, and time of day. Users will input their intended destination, and the system will provide estimated bus crowding levels based on historical data from the MBTA Rider Census and the MBTA data handling team. The website would provide tables and graphs throughout the day to show the most appropriate time to take the bus to avoid the crowd. 
-
-The primary goal of this project is to provide additional support for mobility-impaired individuals and wheelchair users by helping them identify more accessible and comfortable travel times on public transportation. It will also benefit passengers who experience discomfort in tightly crowded spaces when using MBTA buses.
+Our team will study MBTA bus crowding and service reliability across Boston using ridership and arrival/departure data. We want to understand how passenger load and delays change depending on the route, neighborhood, and time of day. Using data from the MBTA Rider Census and other performance datasets, we will measure patterns such as which routes tend to be most crowded, when delays are most common, and whether some areas experience less reliable service than others. The main purpose of this project is to concentrate on quantitative analysis and predictive modeling to identify where and when crowding and reliability problems are most severe. Our results will also allow us to suggest which routes or time periods may need additional service improvements.
 
 Project Timeline:
-* Weeks 1–2: Collect MBTA Rider Census data, analyze patterns within the datasets, and produce initial tables and graphs summarizing bus crowding trends.
-* Weeks 3–4: Implement destination-based matching using an API and route-matching logic, and develop a system that recommends the least crowded travel windows.
-* Weeks 5–6: Build the user interface and provide flexibility for users to input destinations and view crowding information.
-* Weeks 7–8: Conduct user testing within the team, address bugs and edge cases, and prepare the final project presentation.
-
+* Weeks 1–2: Data Collection 
+* Weeks 3–4: Modeling Crowd Levels + Delay Patterns 
+* Weeks 5–6: Quantitative Evaluation + Disparity Analysis 
+* Weeks 7–8: Recommendations + Final Report
 
 Project Goal:
 
