@@ -44,3 +44,103 @@ Data Visualization
 Test Plan:
 
 To evaluate our system, we will use a chronological train/test split to measure real-world generalization. We will train our models on MBTA bus data from 2023–2024 and test performance on 2025 data to determine whether identified low-crowding periods and reliability patterns remain consistent in a future year. To tune model hyperparameters, we will reserve the final three months of 2024 as a validation set. For crowding prediction, we will evaluate performance using Mean Absolute Error (MAE) and Root Mean Squared Error (RMSE) if modeling passenger load as a continuous variable. We will also compare our model against baseline options, including a historical average model based on route and time-of-day, to ensure that our predictive model provides meaningful improvement.
+
+
+
+
+Log of Ridership.sqlite change, and explanations on the attributes:
+
+# Meta data for MBTA Ridership
+
+### mode *dropped, in BMTA ridership, all modes are set into 3, since it is about bus (3)*
+
+Indicates the type of transit service. Examples:  
+1 = Light Rail (Green Line)
+2 = Heavy Rail (Red, Orange, Blue)
+3 = Bus
+4 = Commuter Rail    
+5 = Ferry
+6 = The Ride (paratransit)
+
+### season
+
+The reporting period for the ridership data. Examples: 2024 Summer, 2024 Fall.
+
+### route_id *dropped, route_id and route_name is effectively the same for MBTA bus*
+
+Numeric identifier for the route. For buses, this is the bus route number. For rapid transit, typical values include: 1 = Red Line 2 = Orange Line 3 = Blue Line 4 = Green Line
+
+### route_name
+
+Human-readable name or label for the route. Sometimes redundant with route_id.
+
+### route_variant *dropped, considered useless data*
+
+Specific branch or pattern of the route. Examples: 1_0 = Route 1 inbound 1_1 = Route 1 outbound 47_0 = Route 47 inbound
+
+## Trip Structure
+
+### stop_sequence
+
+The order of stops along a route variant. 1 = first stop, 2 = second stop, and so on.
+
+### direction_id
+
+Direction of travel. 0 = outbound 1 = inbound
+
+### day_type_id and day_type_name *day_type_id dropped, since the corresponding relationship is decoded and recorded as below:*
+
+day_type_id (1) = weekday
+day_type_id (2) = saturday
+day_type_id (3) = sunday
+
+Indicates the type of day represented. Examples: WKD = weekday SAT = Saturday SUN = Sunday
+
+### time_period_id and time_period_name *time_period_id dropped, the relationship between time_period_id and time_period_name is captured as below:*
+
+time_period_01, VERY_EARLY_MORNING
+time_period_02, EARLY_AM
+time_period_03, AM_PEAK
+time_period_04, MIDDAY_BASE
+time_period_05, MIDDAY_SCHOOL
+time_period_06, PM_PEAK
+time_period_07, EVENING
+time_period_08, LATE_EVENING
+time_period_09, NIGHT
+time_period_10, OFF_PEAK
+time_period_11, OFF_PEAK
+
+
+Indicates the time-of-day bucket. Examples: AM Peak, Midday, PM Peak, Evening, Late Night.
+
+## Stop Information
+
+### stop_name
+
+Human-readable name of the stop. Example: MASSACHUSETTS AVE @ BEACON ST.
+
+### stop_id 
+
+Numeric identifier for the stop, unique across MBTA.
+
+## Ridership Metrics
+
+### average_ons_per_trip
+
+Average number of passengers boarding at this stop per trip. Computed as total boardings divided by number of trips.
+
+### average_offs_per_trip
+
+Average number of passengers alighting at this stop per trip.
+
+### average_load_per_trip
+
+Average number of passengers on the vehicle after leaving this stop. Represents crowdedness.
+
+### num_trips
+
+Number of trips included in the calculation. Smaller values indicate less reliable averages.
+
+### ons_all_trips
+
+Total number of boardings at this stop across all trips in the dataset.
