@@ -59,12 +59,12 @@ Log of Ridership.sqlite change, and explanations on the attributes:
 *dropped, in BMTA ridership, all modes are set into 3, since it is about bus (3)*
 
 Indicates the type of transit service. Examples:  
-1 = Light Rail (Green Line)
-2 = Heavy Rail (Red, Orange, Blue)
-3 = Bus
-4 = Commuter Rail    
-5 = Ferry
-6 = The Ride (paratransit)
+- 1 = Light Rail (Green Line)
+- 2 = Heavy Rail (Red, Orange, Blue)
+- 3 = Bus
+- 4 = Commuter Rail    
+- 5 = Ferry
+- 6 = The Ride (paratransit)
 
 ### season
 
@@ -74,7 +74,11 @@ The reporting period for the ridership data. Examples: 2024 Summer, 2024 Fall.
 
 *dropped, route_id and route_name is effectively the same for MBTA bus*
 
-Numeric identifier for the route. For buses, this is the bus route number. For rapid transit, typical values include: 1 = Red Line 2 = Orange Line 3 = Blue Line 4 = Green Line
+Numeric identifier for the route. For buses, this is the bus route number. For rapid transit, typical values include: 
+- 1 = Red Line 
+- 2 = Orange Line 
+- 3 = Blue Line 
+- 4 = Green Line
 
 ### route_name
 
@@ -84,13 +88,18 @@ Human-readable name or label for the route. Sometimes redundant with route_id.
 
 *dropped, considered useless data*
 
-Specific branch or pattern of the route. Examples: 1_0 = Route 1 inbound 1_1 = Route 1 outbound 47_0 = Route 47 inbound
+Specific branch or pattern of the route. Examples: 
+- 1_0 = Route 1 inbound 
+- 1_1 = Route 1 outbound 
+- 47_0 = Route 47 inbound
 
 ## Trip Structure
 
 ### stop_sequence
 
-The order of stops along a route variant. 1 = first stop, 2 = second stop, and so on.
+The order of stops along a route variant. 
+- 1 = first stop, 
+- 2 = second stop, and so on.
 
 ### direction_id
 
@@ -100,9 +109,9 @@ Direction of travel. 0 = outbound 1 = inbound
 
 *day_type_id dropped, since the corresponding relationship is decoded and recorded as below:*
 
-day_type_id (1) = weekday
-day_type_id (2) = saturday
-day_type_id (3) = sunday
+- day_type_id (1) = weekday
+- day_type_id (2) = saturday
+- day_type_id (3) = sunday
 
 Indicates the type of day represented. Examples: WKD = weekday SAT = Saturday SUN = Sunday
 
@@ -110,17 +119,17 @@ Indicates the type of day represented. Examples: WKD = weekday SAT = Saturday SU
 
 *time_period_id dropped, the relationship between time_period_id and time_period_name is captured as below:*
 
-time_period_01, VERY_EARLY_MORNING
-time_period_02, EARLY_AM
-time_period_03, AM_PEAK
-time_period_04, MIDDAY_BASE
-time_period_05, MIDDAY_SCHOOL
-time_period_06, PM_PEAK
-time_period_07, EVENING
-time_period_08, LATE_EVENING
-time_period_09, NIGHT
-time_period_10, OFF_PEAK
-time_period_11, OFF_PEAK
+- time_period_01, VERY_EARLY_MORNING
+- time_period_02, EARLY_AM
+- time_period_03, AM_PEAK
+- time_period_04, MIDDAY_BASE
+- time_period_05, MIDDAY_SCHOOL
+- time_period_06, PM_PEAK
+- time_period_07, EVENING
+- time_period_08, LATE_EVENING
+- time_period_09, NIGHT
+- time_period_10, OFF_PEAK
+- time_period_11, OFF_PEAK
 
 
 Indicates the time-of-day bucket. Examples: AM Peak, Midday, PM Peak, Evening, Late Night.
