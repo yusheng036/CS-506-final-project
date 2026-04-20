@@ -52,7 +52,11 @@ Log of Ridership.sqlite change, and explanations on the attributes:
 
 # Meta data for MBTA Ridership
 
-### mode *dropped, in BMTA ridership, all modes are set into 3, since it is about bus (3)*
+*To start, we have several datasets which are labelled with their versions, and a typical dataset contains a sqlite version and a CSV version. ALL rows with null values in at least one field is dropped, and all unnecessary columns are also dropped, in order to maintain a light DB in github without LFS, the details of fields and dropped fields are written below*
+
+### mode 
+
+*dropped, in BMTA ridership, all modes are set into 3, since it is about bus (3)*
 
 Indicates the type of transit service. Examples:  
 1 = Light Rail (Green Line)
@@ -66,7 +70,9 @@ Indicates the type of transit service. Examples:
 
 The reporting period for the ridership data. Examples: 2024 Summer, 2024 Fall.
 
-### route_id *dropped, route_id and route_name is effectively the same for MBTA bus*
+### route_id 
+
+*dropped, route_id and route_name is effectively the same for MBTA bus*
 
 Numeric identifier for the route. For buses, this is the bus route number. For rapid transit, typical values include: 1 = Red Line 2 = Orange Line 3 = Blue Line 4 = Green Line
 
@@ -74,7 +80,9 @@ Numeric identifier for the route. For buses, this is the bus route number. For r
 
 Human-readable name or label for the route. Sometimes redundant with route_id.
 
-### route_variant *dropped, considered useless data*
+### route_variant 
+
+*dropped, considered useless data*
 
 Specific branch or pattern of the route. Examples: 1_0 = Route 1 inbound 1_1 = Route 1 outbound 47_0 = Route 47 inbound
 
@@ -88,7 +96,9 @@ The order of stops along a route variant. 1 = first stop, 2 = second stop, and s
 
 Direction of travel. 0 = outbound 1 = inbound
 
-### day_type_id and day_type_name *day_type_id dropped, since the corresponding relationship is decoded and recorded as below:*
+### day_type_id and day_type_name 
+
+*day_type_id dropped, since the corresponding relationship is decoded and recorded as below:*
 
 day_type_id (1) = weekday
 day_type_id (2) = saturday
@@ -96,7 +106,9 @@ day_type_id (3) = sunday
 
 Indicates the type of day represented. Examples: WKD = weekday SAT = Saturday SUN = Sunday
 
-### time_period_id and time_period_name *time_period_id dropped, the relationship between time_period_id and time_period_name is captured as below:*
+### time_period_id and time_period_name 
+
+*time_period_id dropped, the relationship between time_period_id and time_period_name is captured as below:*
 
 time_period_01, VERY_EARLY_MORNING
 time_period_02, EARLY_AM
