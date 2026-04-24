@@ -6,8 +6,8 @@ from xgboost import XGBRegressor
 from sklearn.metrics import mean_absolute_error, root_mean_squared_error
 from sklearn.preprocessing import LabelEncoder
 
-project_root = Path(__file__).resolve().parent.parent
-db_path = project_root / "dataset" / "Ridership.sqlite"
+project_root = Path(__file__).resolve().parent.parent.parent
+db_path = project_root / "dataset" / "Ridership_v1.sqlite"
 
 print("DB path:", db_path)
 print("Exists:", db_path.exists())

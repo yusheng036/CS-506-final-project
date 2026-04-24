@@ -1,3 +1,4 @@
+from pathlib import Path
 import sqlite3
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -10,7 +11,8 @@ from sklearn.pipeline import Pipeline
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_absolute_error, r2_score
 
-DB_PATH = "../dataset/Ridership.sqlite"
+project_root = Path(__file__).resolve().parent.parent.parent
+DB_PATH = project_root / "dataset" / "Ridership_v1.sqlite"
 TABLE_NAME = "MBTA_Ridership"
 
 # =========================
