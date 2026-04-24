@@ -6,7 +6,7 @@ project_root = Path(__file__).resolve().parent.parent.parent
 
 models = ["Linear\nRegression", "XGBoost", "KNN (k=3)"]
 mae    = [5.003, 3.596, 3.077]
-rmse   = [None,  5.331, 4.994]  # LinearRegression no RMSE recorded
+rmse   = [7.045,  5.331, 4.994]
 
 x = np.arange(len(models))
 width = 0.35

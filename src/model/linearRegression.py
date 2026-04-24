@@ -9,7 +9,7 @@ from sklearn.compose import ColumnTransformer
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.pipeline import Pipeline
 from sklearn.linear_model import LinearRegression
-from sklearn.metrics import mean_absolute_error, r2_score
+from sklearn.metrics import mean_absolute_error, r2_score, root_mean_squared_error
 
 project_root = Path(__file__).resolve().parent.parent.parent
 DB_PATH = project_root / "dataset" / "Ridership_v1.sqlite"
@@ -83,10 +83,12 @@ y_pred = model.predict(X_test)
 # =========================
 mae = mean_absolute_error(y_test, y_pred)
 r2 = r2_score(y_test, y_pred)
+rmse = root_mean_squared_error(y_test, y_pred)
 
 print("\n=== Linear Regression Baseline ===")
 print(f"MAE: {mae:.4f}")
 print(f"R^2: {r2:.4f}")
+print(f"RMSE: {rmse:.4f}")
 
 # =========================
 # 5. Choose one route/day to compare all time periods
