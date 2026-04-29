@@ -149,11 +149,7 @@ plt.savefig(scatter_path, dpi=150)
 plt.show()
 print(f"Saved: {scatter_path}")
 
-# =========================
 # Predict least crowded time period per route
-# =========================
-# Use the trained model to predict average_load for all route/time/day combinations
-# This directly answers project goal 4: identify least crowded travel periods
 
 # Build prediction grid: all routes x all time periods x weekday
 routes = sorted(df["route_name"].unique())
