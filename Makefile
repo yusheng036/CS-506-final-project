@@ -1,6 +1,9 @@
 install:
 	pip install -r requirements.txt
 
+data:
+	python load.py
+
 run:
 	python src/model/knn.py
 	python src/model/xgboostModel.py
