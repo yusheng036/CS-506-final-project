@@ -17,7 +17,6 @@ python -m pytest tests/ -v
 
 ### Run all models
 ```
-python load.py
 python src/model/knn.py
 python src/model/xgboostModel.py
 python src/model/random_forest.py
@@ -40,11 +39,17 @@ make run
 ### Dataset
 The dataset `Ridership_v1.sqlite` is stored in the `dataset/` folder via Git LFS.
 Run `git lfs pull` if the database file is missing after cloning.
-
 If the database is empty or missing the `MBTA_Ridership` table, rebuild it from CSV:
 ```
 python load.py
 ```
+
+### Neural Network Note
+`neural_network.py` requires TensorFlow with AVX instruction support. On older Mac hardware, TensorFlow may crash with `Abort trap: 6`. In that case, install the Mac-specific build:
+```
+pip install tensorflow-macos
+```
+On Windows and Linux, the standard `tensorflow` package works. The `make run` command includes `|| true` so that a Neural Network failure does not block the remaining models.
 
 ---
 
@@ -72,6 +77,26 @@ All models predict `average_load` (average number of passengers on the bus after
 - **Route 455 is the busiest route overall**, peaking at approximately 18 passengers during MIDDAY_SCHOOL on weekdays.
 - **Non-linear models significantly outperform linear baselines** (Random Forest MAE 2.741 vs Linear Regression MAE 5.003), confirming that bus load has strong non-linear interactions between route and time period.
 - **Random Forest is the recommended model** for predicting MBTA bus crowding based on lowest MAE and RMSE across all models tested.
+
+---
+
+## Limitations & Known Failure Cases
+
+### Model Limitations
+- **High-load outlier underestimation:** All models consistently underestimate crowding at stops with actual load above 40–50 passengers. The training data is heavily skewed toward low-load stops, so models have very few high-load neighbors or samples to learn from. Random Forest handles this best but still falls short at extreme peaks.
+- **Inconsistent train/test splits:** Linear Regression and Linear SVM use a random 80/20 split while all other models use a chronological split. This makes direct performance comparison not fully fair — their MAE numbers may be optimistically biased since they can see 2024 patterns during training.
+- **Feature set inconsistency:** Models were implemented independently, resulting in different feature sets (4 to 13 features). A unified feature set across all models would allow fairer comparison.
+
+### Data Limitations
+- **Only Fall seasons:** The dataset contains only Fall data (Fall 2016 – Fall 2024). Models cannot capture seasonal variation — summer ridership near tourist areas or colleges may behave very differently.
+- **Statistical averages, not trip-level data:** `average_load` is aggregated across many trips. Models predict the average behavior for a given context, not the load of a specific trip on a specific date. This limits real-time applicability.
+- **Arrival/departure data excluded:** The MBTA Bus Arrival Departure Times dataset was originally planned for delay analysis but was excluded due to data completeness issues. Service reliability analysis remains as future work.
+- **COVID disruption:** Fall 2020 shows a sharp drop in ridership (~5 passengers average vs ~11 pre-pandemic). This creates a structural break in the time series that may affect model generalization across years.
+
+### Engineering Limitations
+- **Git LFS dependency:** The 97.5 MB SQLite database is stored via Git LFS. Users without `git-lfs` installed will clone a pointer file instead of the actual database, causing `no such table: MBTA_Ridership` errors. Running `python load.py` as a fallback rebuilds the database from the CSV file.
+- **TensorFlow AVX incompatibility:** `neural_network.py` crashes on older Mac hardware that lacks AVX instruction support. Mac users should install `tensorflow-macos` separately.
+- **Training time:** Random Forest (500 trees) and Neural Network take several minutes to train on the full 1M row dataset. KNN prediction is also slow due to distance computation across 800K training points.
 
 ---
 
@@ -199,8 +224,3 @@ Number of trips included in the calculation. Smaller values indicate less reliab
 
 ### ons_all_trips
 Total boardings across all trips in the dataset.
-
-## Limitations and Failure Cases
-
-### Random Forest
-The most visible issue is shown in the actual vs. predicted scatter plot. When actual load > 20, the model underpredicts because RF averages tree outputs, which are bounded by the range of training values. It can never predict a load higher than the max it saw in training.
