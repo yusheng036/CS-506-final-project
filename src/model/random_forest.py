@@ -56,9 +56,14 @@ FEATURES = [
     "season_name", "season_year", "num_trips",
 ]
 
-for col in ["route_name", "day_type_name", "season_name"]:
-    le = LabelEncoder()
-    df[col] = le.fit_transform(df[col].astype(str))
+le_route = LabelEncoder()
+df["route_name"] = le_route.fit_transform(df["route_name"].astype(str))
+
+le_day = LabelEncoder()
+df["day_type_name"] = le_day.fit_transform(df["day_type_name"].astype(str))
+
+le_season = LabelEncoder()
+df["season_name"] = le_season.fit_transform(df["season_name"].astype(str))
 
 train = df[df["season_year"] <= 2022]
 val   = df[df["season_year"] == 2023]
@@ -143,3 +148,102 @@ scatter_path = project_root / "diagram" / "model" / "rf_actual_vs_predicted.png"
 plt.savefig(scatter_path, dpi=150)
 plt.show()
 print(f"Saved: {scatter_path}")
+
+# =========================
+# Predict least crowded time period per route
+# =========================
+# Use the trained model to predict average_load for all route/time/day combinations
+# This directly answers project goal 4: identify least crowded travel periods
+
+# Build prediction grid: all routes x all time periods x weekday
+routes = sorted(df["route_name"].unique())
+time_periods = list(range(len(TIME_ORDER)))
+day_encoded = 2
+season_encoded = 0
+season_year = 2024
+num_trips_median = int(df["num_trips"].median())
+stop_sequence_median = int(df["stop_sequence"].median())
+stop_id_median = int(df["stop_id"].median())
+direction = 0  # outbound
+
+rows = []
+for route in routes:
+    for tp in time_periods:
+        rows.append({
+            "route_name": route,
+            "stop_id": stop_id_median,
+            "stop_sequence": stop_sequence_median,
+            "direction_id": direction,
+            "day_type_name": day_encoded,
+            "time_period_encoded": tp,
+            "season_name": season_encoded,
+            "season_year": season_year,
+            "num_trips": num_trips_median,
+        })
+
+grid_df = pd.DataFrame(rows)
+grid_df["predicted_load"] = model.predict(grid_df[FEATURES])
+
+# For each route, find the least crowded time period
+grid_df["time_period_name"] = grid_df["time_period_encoded"].map(
+    {i: t for i, t in enumerate(TIME_ORDER)}
+)
+
+least_crowded = (
+    grid_df.loc[grid_df.groupby("route_name")["predicted_load"].idxmin()]
+    [["route_name", "time_period_name", "predicted_load"]]
+    .reset_index(drop=True)
+)
+
+# Decode route name back to original
+least_crowded["route_name"] = le_route.inverse_transform(
+    least_crowded["route_name"].astype(int)
+)
+
+print("\n=== Least Crowded Time Period per Route (weekday, Random Forest) ===")
+print(least_crowded.to_string(index=False))
+
+# Save to CSV
+out_csv = project_root / "diagram" / "model" / "least_crowded_per_route.csv"
+least_crowded.to_csv(out_csv, index=False)
+print(f"\nSaved: {out_csv}")
+
+# Plot: top 5 busiest routes, load across all time periods
+top5_routes = (
+    grid_df.groupby("route_name")["predicted_load"]
+    .mean()
+    .nlargest(5)
+    .index.tolist()
+)
+
+top5_decoded = le_route.inverse_transform(top5_routes)
+
+fig, ax = plt.subplots(figsize=(12, 5))
+colors = ["#2e7d32", "#185FA5", "#F28C28", "#9C27B0", "#E53935"]
+
+for i, (route_enc, route_dec) in enumerate(zip(top5_routes, top5_decoded)):
+    route_data = grid_df[grid_df["route_name"] == route_enc].sort_values("time_period_encoded")
+    ax.plot(
+        route_data["time_period_name"],
+        route_data["predicted_load"],
+        marker="o", linewidth=2,
+        color=colors[i],
+        label=f"Route {route_dec}"
+    )
+
+ax.set_xlabel("Time Period", fontsize=12)
+ax.set_ylabel("Predicted Average Load", fontsize=12)
+ax.set_title(
+    "Top 5 Busiest Routes: Predicted Load Across Time Periods\n(weekday, Random Forest)",
+    fontsize=13
+)
+ax.legend()
+ax.spines[["top", "right"]].set_visible(False)
+ax.grid(axis="y", color="#e0e0e0", linewidth=0.7)
+plt.xticks(rotation=30, ha="right")
+plt.tight_layout()
+
+out_plot = project_root / "diagram" / "model" / "rf_load_by_time.png"
+plt.savefig(out_plot, dpi=150)
+plt.show()
+print(f"Saved: {out_plot}")
