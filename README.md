@@ -5,29 +5,44 @@
 
 ## How to Build and Run
 
-### Load dataset into SQLite
-```
-make data
-```
-Reads `dataset/Ridership_v1.csv` and writes it to `dataset/Ridership_v1.sqlite`.
-
 ### Install dependencies
 ```
-make install
-```
-
-### Run all models
-```
-make run
+pip install -r requirements.txt
 ```
 
 ### Run tests
 ```
+python -m pytest tests/ -v
+```
+
+### Run all models
+```
+python src/model/knn.py
+python src/model/xgboostModel.py
+python src/model/random_forest.py
+python src/model/neural_network.py
+python src/model/linearRegression.py
+python src/model/linearSVM.py
+python src/model/lasso.py
+python src/model/ridge.py
+python src/model/comparison.py
+```
+
+### Alternative: using make (Mac/Linux only)
+```
+make install
 make test
+make run
 ```
 
 ### Dataset
-The raw dataset `Ridership_v1.csv` is in the `dataset/` folder. Run `make data` to generate `Ridership_v1.sqlite`.
+The dataset `Ridership_v1.sqlite` is stored in the `dataset/` folder via Git LFS.
+Run `git lfs pull` if the database file is missing after cloning.
+
+If the database is empty or missing the `MBTA_Ridership` table, rebuild it from CSV:
+```
+python load.py
+```
 
 ---
 
@@ -46,7 +61,7 @@ The raw dataset `Ridership_v1.csv` is in the `dataset/` folder. Run `make data` 
 
 All models predict `average_load` (average number of passengers on the bus after leaving a stop) using features including route, stop sequence, direction, day type, time period, and season year. Models are evaluated on 2024 data after training on 2016–2022 and validating on 2023. Random Forest achieves the lowest test MAE (2.741) and is used as the primary model for prediction analysis.
 
-Note: Linear Regression and Linear SVM use a random 80/20 train/test split and a smaller feature set, implemented independently. Their results are included for reference but are not directly comparable to the chronological split used by other models.
+**Note:** Linear Regression and Linear SVM use a random 80/20 train/test split and a smaller feature set, implemented independently. Their results are included for reference but are not directly comparable to the chronological split used by other models. Feature sets also vary across models as they were implemented independently — Random Forest and Neural Network include `stop_id` and `season_name`; Lasso and Ridge include `average_ons` and `average_offs`; Linear SVM uses the most complete feature set including `stop_name` and `ons_all_trips`.
 
 ## Key Findings
 
