@@ -17,6 +17,7 @@ python -m pytest tests/ -v
 
 ### Run all models
 ```
+python load.py
 python src/model/knn.py
 python src/model/xgboostModel.py
 python src/model/random_forest.py
@@ -31,6 +32,7 @@ python src/model/comparison.py
 ### Alternative: using make (Mac/Linux only)
 ```
 make install
+make data
 make test
 make run
 ```
