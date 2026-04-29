@@ -197,3 +197,8 @@ Number of trips included in the calculation. Smaller values indicate less reliab
 
 ### ons_all_trips
 Total boardings across all trips in the dataset.
+
+## Limitations and Failure Cases
+
+### Random Forest
+The most visible issue is shown in the actual vs. predicted scatter plot. When actual load > 20, the model underpredicts because RF averages tree outputs, which are bounded by the range of training values. It can never predict a load higher than the max it saw in training.
