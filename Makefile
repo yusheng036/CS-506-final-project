@@ -8,7 +8,7 @@ run:
 	python src/model/knn.py
 	python src/model/xgboostModel.py
 	python src/model/random_forest.py
-	python src/model/neural_network.py
+	python src/model/neural_network.py || true
 	python src/model/linearRegression.py
 	python src/model/linearSVM.py
 	python src/model/lasso.py
