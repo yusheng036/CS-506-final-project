@@ -38,77 +38,87 @@ The dataset `Ridership_v1.sqlite` is stored in the `dataset/` folder via Git LFS
 | Neural Network | 3.020 | 4.331 |
 | Linear SVM | 3.924 | 6.138 |
 
-Random Forest achieves the best test MAE (2.741) across all models. All models predict `average_load` (average number of passengers on the bus after leaving a stop) using features including route, stop sequence, direction, day type, time period, and season year. Models are evaluated on 2024 data after training on 2016–2022 and validating on 2023.
+All models predict `average_load` (average number of passengers on the bus after leaving a stop) using features including route, stop sequence, direction, day type, time period, and season year. Models are evaluated on 2024 data after training on 2016–2022 and validating on 2023. Random Forest achieves the lowest test MAE (2.741) and is used as the primary model for prediction analysis.
+
+Note: Linear Regression and Linear SVM use a random 80/20 train/test split and a smaller feature set, implemented independently. Their results are included for reference but are not directly comparable to the chronological split used by other models.
+
+## Key Findings
+
+- **MIDDAY_SCHOOL and PM_PEAK are consistently the most crowded periods** across the top busiest routes, with predicted loads of 14–18 passengers.
+- **VERY_EARLY_MORNING and NIGHT are the least crowded periods**, with predicted loads of 5–8 passengers across all routes.
+- **Route 455 is the busiest route overall**, peaking at approximately 18 passengers during MIDDAY_SCHOOL on weekdays.
+- **Non-linear models significantly outperform linear baselines** (Random Forest MAE 2.741 vs Linear Regression MAE 5.003), confirming that bus load has strong non-linear interactions between route and time period.
+- **Random Forest is the recommended model** for predicting MBTA bus crowding based on lowest MAE and RMSE across all models tested.
 
 ---
 
 ## Project Description
 
-Our team will study MBTA bus crowding and service reliability across Boston using ridership and arrival/departure data. We want to understand how passenger load and delays change depending on the route, neighborhood, and time of day. Using data from the MBTA Rider Census and other performance datasets, we will measure patterns such as which routes tend to be most crowded, when delays are most common, and whether some areas experience less reliable service than others. The main purpose of this project is to concentrate on quantitative analysis and predictive modeling to identify where and when crowding and reliability problems are most severe. Our results will also allow us to suggest which routes or time periods may need additional service improvements.
+Our team studies MBTA bus crowding across Boston using historical ridership data. We analyze how passenger load changes depending on route, time of day, and day type, and build predictive models to identify when and where buses are most and least crowded.
 
 ## Project Timeline
 * Weeks 1–2: Data Collection
-* Weeks 3–4: Modeling Crowd Levels + Delay Patterns
-* Weeks 5–6: Quantitative Evaluation + Disparity Analysis
-* Weeks 7–8: Recommendations + Final Report
+* Weeks 3–4: Modeling Crowd Levels
+* Weeks 5–6: Quantitative Evaluation + Model Comparison
+* Weeks 7–8: Prediction Analysis + Final Report
 
 ## Project Goal
 
-The primary goal of this project is to analyze MBTA bus performance data to identify whether bus service quality is consistent across different geographic areas, routes, and time periods in Boston. In this project, equity is defined as fairness in service reliability rather than economic or demographic factors.
+The primary goal is to analyze MBTA bus performance data to identify whether bus service quality is consistent across different routes and time periods in Boston.
 
 Specifically, this project aims to:
-1. Quantify bus service performance across Boston by measuring key indicators such as average delay time, on-time arrival rate, and passenger load by route, stop, and time of day.
-2. Identify spatial and temporal disparities in bus performance by comparing service reliability across different neighborhoods, bus routes, and peak versus off-peak travel periods.
-3. Predict bus crowding levels and delay patterns using historical MBTA ridership and arrival/departure data, based on features such as route, time of day, day of week, and season.
-4. Determine the least crowded and most reliable travel time periods for selected bus routes by applying regression or classification models to historical data.
+1. Quantify bus service performance by measuring average passenger load by route, stop, and time of day.
+2. Identify temporal disparities in bus performance by comparing service across peak versus off-peak travel periods.
+3. Predict bus crowding levels using historical MBTA ridership data based on features such as route, time of day, day of week, and season.
+4. Determine the least crowded travel time periods for selected bus routes using regression models trained on historical data.
 
-These goals will be evaluated using quantitative metrics such as prediction error (e.g., MAE or RMSE), differences in average delay across routes and time periods, and consistency of results across train-test splits.
+These goals are evaluated using MAE and RMSE across chronological train/val/test splits.
 
 ## Data Collection
 
 1. **MBTA Bus Ridership by Time Period, Season, Route/Line, and Stop**
-   Description: The dataset provides ridership activity such as average on and off at each stop during different seasons.
-   Data Access Method: Downloaded from the MBTA Open Data Portal. https://mbta-massdot.opendata.arcgis.com/datasets/7acd353c1a734eb8a23caf46a0e66b23_0/explore
+   The dataset provides ridership activity including average boardings, alightings, and passenger load at each stop across different seasons. Downloaded from the MBTA Open Data Portal.
+   https://mbta-massdot.opendata.arcgis.com/datasets/7acd353c1a734eb8a23caf46a0e66b23_0/explore
 
 2. **MBTA Bus Arrival Departure Times (2020-2025)**
-   Description: The dataset contains arrival and departure events for MBTA buses and includes both scheduled and actual departure times at key timepoints along each trip.
-   Data Access Method: Downloaded from the MBTA Open Data Portal. https://mbta-massdot.opendata.arcgis.com/datasets/924df13d845f4907bb6a6c3ed380d57a/about
+   Originally planned for delay analysis, but excluded from final modeling due to data completeness issues. All models use the ridership dataset only.
 
 ## Data Modelling
 
-We preprocess the MBTA ridership data by cleaning missing values and aggregating passenger counts by route, stop, and time of day. Crowd levels are measured using `average_load` (average passengers on the bus after leaving a stop) over fixed time intervals.
+We preprocess the MBTA ridership data by cleaning missing values and aggregating passenger counts by route, stop, and time of day. The prediction target is `average_load` — average passengers on the bus after leaving a stop — used as a proxy for crowding.
 
-We implemented and compared the following models to predict `average_load`:
-- Linear Regression (baseline)
-- KNN Regressor (k=3, with StandardScaler)
-- XGBoost
-- Random Forest
-- Lasso (L1 regularization)
-- Ridge (L2 regularization)
-- Neural Network
-- Linear SVM
+We implemented and compared eight models:
+- **Linear Regression** — interpretable baseline with One-Hot Encoding
+- **KNN Regressor (k=3)** — non-parametric, with StandardScaler; k selected by validation MAE
+- **XGBoost** — gradient boosted trees with chronological split
+- **Random Forest** — ensemble of 500 trees; best overall performance
+- **Lasso (L1 regularization)** — linear model with sparsity penalty
+- **Ridge (L2 regularization)** — linear model with shrinkage penalty
+- **Neural Network** — 3-layer MLP with dropout, trained with early stopping
+- **Linear SVM** — LinearSVR with feature hashing for categorical encoding
 
-All models use a chronological train/val/test split: train on 2016–2022, validate on 2023, test on 2024.
+All models except Linear Regression and Linear SVM use a chronological train/val/test split: train on 2016–2022, validate on 2023, test on 2024.
 
 ## Data Visualization
 
 Visualizations are saved in `diagram/visual/` and `diagram/model/`:
-- Seasonal average load trends
-- Weekday vs weekend ridership patterns
-- Top 20 busiest routes by average load
-- Per-route load by time period
-- Model performance comparison (MAE, RMSE, L∞)
-- Actual vs predicted plots for each model
+- `seasonal_load.png` — average load by season (2016–2024)
+- `weekday_ridership.png` / `weekend_ridership.png` — ridership patterns by time period
+- `top20_load.png` — top 20 busiest routes by average load
+- `model_comparison.png` — MAE, RMSE, and L∞ error across all 8 models
+- `rf_load_by_time.png` — top 5 busiest routes predicted load across all time periods
+- `knn_k_selection.png` — KNN validation MAE vs k
+- Per-model actual vs predicted scatter plots
 
 ## Test Plan
 
-We use a chronological train/test split to measure real-world generalization. Models are trained on 2016–2022, validated on 2023, and tested on 2024. Performance is evaluated using MAE and RMSE. Models are also compared against a historical average baseline.
+Models are trained on 2016–2022, validated on 2023, and tested on 2024 using MAE and RMSE. All models are also compared against a historical average baseline (group mean by route, time period, and day type). Random Forest outperforms the baseline by 37% on MAE (2.741 vs 4.344).
 
 ---
 
 ## Dataset Metadata
 
-*ALL rows with null values in at least one field are dropped, and all unnecessary columns are also dropped.*
+*ALL rows with null values in at least one field are dropped. Unnecessary columns are dropped to keep the database lightweight without Git LFS for the cleaned version.*
 
 ### mode
 *dropped — all values are 3 (Bus)*
@@ -162,7 +172,7 @@ Average alightings at this stop per trip.
 Average passengers on the vehicle after leaving this stop. Used as the crowding proxy and prediction target.
 
 ### num_trips
-Number of trips included in the calculation.
+Number of trips included in the calculation. Smaller values indicate less reliable averages.
 
 ### ons_all_trips
 Total boardings across all trips in the dataset.
