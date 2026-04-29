@@ -185,7 +185,7 @@ plt.annotate(
 )
 
 plt.tight_layout()
-plt.savefig("actual_vs_predicted_highlight.png", dpi=150)
+plt.savefig(project_root / "diagram/model/linearRegressionPredict.png", dpi=150)
 plt.show()
 
 print("Saved: actual_vs_predicted_highlight.png")

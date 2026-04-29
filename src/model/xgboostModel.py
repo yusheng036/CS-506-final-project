@@ -125,6 +125,6 @@ ax.spines[["top", "right"]].set_visible(False)
 ax.grid(axis="x", color="#e0e0e0", linewidth=0.7)
 
 plt.tight_layout()
-plt.savefig(project_root / "mbta_feature_importance.png", dpi=150)
+plt.savefig(project_root / "diagram/model/xgboost_feature_importance.png", dpi=150)
 plt.show()
 print("Saved: mbta_feature_importance.png")
