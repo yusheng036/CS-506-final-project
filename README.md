@@ -5,6 +5,12 @@
 
 ## How to Build and Run
 
+### Load dataset into SQLite
+```
+make data
+```
+Reads `dataset/Ridership_v1.csv` and writes it to `dataset/Ridership_v1.sqlite`.
+
 ### Install dependencies
 ```
 make install
@@ -20,14 +26,8 @@ make run
 make test
 ```
 
-### Load dataset into SQLite
-```
-make data
-```
-Reads `dataset/Ridership_v1.csv` and writes it to `dataset/Ridership_v1.sqlite`.
-
 ### Dataset
-The dataset `Ridership_v1.sqlite` is stored in the `dataset/` folder via Git LFS.
+The raw dataset `Ridership_v1.csv` is in the `dataset/` folder. Run `make data` to generate `Ridership_v1.sqlite`.
 
 ---
 
