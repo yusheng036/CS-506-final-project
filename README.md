@@ -1,4 +1,4 @@
-# CS 506 Final Project — MBTA Bus Crowding Analysis
+# MBTA Bus Crowding Analysis
 
 ## Video
 Presentation:(https://www.youtube.com/watch?v=3xVfyBtVULY) 
